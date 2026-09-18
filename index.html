@@ -34,7 +34,6 @@
  justify-content: center;
  padding: 20px;
  background-image: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 100%);
- user-select: none;
  }
 
  .container {
@@ -47,11 +46,7 @@
  border-radius: 20px;
  padding: 40px 30px;
  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
- text-align: center; cursor: pointer; /* للإشارة إلى أن البطاقة تفاعلية */ transition: transform 0.2s ease;
- }
-
- .container:active {
- transform: scale(0.99);
+ text-align: center;
  }
 
  .thought-box {
@@ -76,7 +71,7 @@
 
  .controls {
  display: flex;
- justify-content: center;
+ flex-direction: column;
  align-items: center;
  gap: 15px;
  margin-top: 20px;
@@ -90,7 +85,7 @@
  color: var(--accent);
  padding: 10px 25px;
  border-radius: 30px;
- font-size: 0.95rem;
+ font-size: 1rem;
  cursor: pointer;
  transition: all 0.3s ease;
  font-family: 'Tajawal', sans-serif;
@@ -99,19 +94,16 @@
  button:hover {
  background: var(--accent);
  color: var(--bg-color);
- box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
  }
 
- /* إخفاء مشغل الصوت كلياً */
- .hidden-audio {
- display: none;
- }
-
- .music-status {
- font-size: 0.75rem;
- color: var(--text-muted);
- margin-top: 15px;
- letter-spacing: 0.5px;
+ /* شريط الصوت مع تطبيق الشفافية بنسبة 90% والألوان المتناسقة */ audio {
+ width: 100%;
+ max-width: 300px;
+ height: 40px;
+ border-radius: 20px;
+ outline: none;
+ opacity: 0.9;
+ filter: invert(90%) hue-rotate(180deg);
  }
 
  footer {
@@ -123,22 +115,21 @@
 </head>
 <body>
 
- <div class="container" onclick="handleCardClick(event)">
+ <div class="container">
  <div class="thought-box">
  <p id="thoughtText" class="thought-text">"تأتي السعادة أحياناً على شكل هدوء، كوب قهوة دافئ، وخاطرة تعيد ترتيب ما أبعثره زحام الأيام."</p>
  </div>
 
  <div class="controls">
- <!-- زر الخاطرة فقط هو الظاهر -->
- <button onclick="event.stopPropagation(); nextThought();"> الخاطرة التالية</button>
- </div> <div id="musicStatus" class="music-status">انقر في أي مكان على البطاقة لتشغيل الموسيقى </div> </div>
+ <button onclick="nextThought()"> الخاطرة التالية</button>
+ <!-- شريط الصوت القياسي والمرئي بشفافية متناسقة --> <audio controls loop>
+ <source src="./music.mp3" type="audio/mp3">
+ متصفحك لا يدعم المشغل الصوتي.
+ </audio>
+ </div>
+ </div>
 
  <footer>WASAN THOUGHTS &copy; 2026</footer>
-
- <!-- ملف الصوت المخفي -->
- <audio id="bgMusic" class="hidden-audio" preload="auto" loop>
- <source src="./music.mp3" type="audio/mp3">
- </audio>
 
  <script>
  const thoughts = [ "تأتي السعادة أحياناً على شكل هدوء، كوب قهوة دافئ، وخاطرة تعيد ترتيب ما أبعثره زحام الأيام.", "وفي زحمة الحياة، ما أجمَل أن نلتقي بقلوب تدرك معنى الوصل دون إكراه، وتكتفي بأن تكون خيراً لا يزول.", "للسكون لغة لا يفهمها إلا من ملّ صخب التفاصيل.. هنيئاً لمن وجد راحته في عزلته الجميلة.", "سلامٌ على العابرين الذين تركوا أثراً طيباً، وعلى الكلمات الناعمة التي دملت جرحاً دون أن تشعر.", "الأيام اللطيفة تبدأ من إشراقة فكر هادئ، واقتناع تام بأن ما كتبه الله هو أجمل ما قد يكون." ];
@@ -153,25 +144,6 @@
  textElement.innerText = `"${thoughts[currentIndex]}"`;
  textElement.classList.remove('fade-out');
  }, 300);
- }
-
- const music = document.getElementById('bgMusic');
- const musicStatus = document.getElementById('musicStatus');
- let isPlaying = false;
-
- // النقر على البطاقة (خارج زر الخاطرة التالية) يشغل أو يوقف الموسيقى بسلاسة function handleCardClick(event) {
- if (isPlaying) {
- music.pause();
- musicStatus.innerText = "انقر على البطاقة لاستئناف الموسيقى ";
- isPlaying = false;
- } else {
- music.play().then(() => {
- musicStatus.innerText = "الموسيقى تعمل في الخلفية ";
- isPlaying = true;
- }).catch(error => {
- musicStatus.innerText = "تعذر تشغيل الصوت";
- });
- }
  }
  </script>
 </body>
