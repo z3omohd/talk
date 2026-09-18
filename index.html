@@ -137,8 +137,9 @@
 
  <footer>WASAN THOUGHTS &copy; 2026</footer>
 
- <!-- ملف صوتي مدمج مباشرة داخلياً لضمان التشغيل الفوري بدون روابط خارجية --> <audio id="bgMusic" loop>
- <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjQwLjEwMQAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAAFVABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//OEAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAAFVABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//" type="audio/mp3">
+ <!-- ملف صوتي هادئ ومباشر -->
+ <audio id="bgMusic" loop>
+ <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=lofi-study-112191.mp3" type="audio/mp3">
  </audio>
 
  <script>
@@ -175,7 +176,7 @@
  musicStatus.innerText = "الموسيقى تعمل في الخلفية ";
  isPlaying = true;
  }).catch(e => {
- musicStatus.innerText = "تعذر التشغيل التلقائي، اضغط مرة أخرى";
+ musicStatus.innerText = "تعذر التشغيل، تحقق من اتصال الإنترنت";
  });
  }
  }
