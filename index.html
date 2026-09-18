@@ -54,7 +54,7 @@
  display: flex;
  align-items: center;
  justify-content: center;
- margin-bottom: 30px;
+ margin-bottom: 25px;
  }
 
  p.thought-text {
@@ -71,38 +71,44 @@
 
  .controls {
  display: flex;
- flex-direction: column;
+ justify-content: center;
  align-items: center;
  gap: 15px;
  margin-top: 20px;
  border-top: 1px solid var(--border-color);
  padding-top: 20px;
+ flex-wrap: wrap;
  }
 
  button {
  background: rgba(56, 189, 248, 0.1);
  border: 1px solid var(--accent);
  color: var(--accent);
- padding: 10px 25px;
+ padding: 10px 22px;
  border-radius: 30px;
- font-size: 1rem;
+ font-size: 0.95rem;
  cursor: pointer;
  transition: all 0.3s ease;
  font-family: 'Tajawal', sans-serif;
+ display: flex;
+ align-items: center;
+ gap: 8px;
  }
 
  button:hover {
  background: var(--accent);
  color: var(--bg-color);
+ box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
  }
 
- audio {
- width: 100%;
- max-width: 300px;
- height: 40px;
- border-radius: 20px;
- outline: none;
- filter: invert(90%) hue-rotate(180deg);
+ /* إخفاء شريط الصوت التقليدي بالكامل ليصبح التصميم نظيفاً */ audio {
+ display: none;
+ }
+
+ .music-status {
+ font-size: 0.8rem;
+ color: var(--text-muted);
+ margin-top: 12px;
  }
 
  footer {
@@ -121,16 +127,14 @@
 
  <div class="controls">
  <button onclick="nextThought()"> الخاطرة التالية</button>
- 
- <!-- استدعاء ملف الصوت المرفوع بجانب الصفحة في نفس المستودع -->
- <audio controls loop>
- <source src="./music.mp3" type="audio/mp3">
- متصفحك لا يدعم المشغل الصوتي.
- </audio>
- </div>
- </div>
+ <button id="musicToggleBtn" onclick="toggleAudio()"> تشغيل الخلفية الموسيقية</button>
+ </div> <div id="musicStatus" class="music-status">اضغط لتفعيل الأجواء الموسيقية </div> </div>
 
  <footer>WASAN THOUGHTS &copy; 2026</footer>
+
+ <!-- ملف الصوت مخفي ويعمل في الخلفية --> <audio id="bgMusic" loop>
+ <source src="./music.mp3" type="audio/mp3">
+ </audio>
 
  <script>
  const thoughts = [ "تأتي السعادة أحياناً على شكل هدوء، كوب قهوة دافئ، وخاطرة تعيد ترتيب ما أبعثره زحام الأيام.", "وفي زحمة الحياة، ما أجمَل أن نلتقي بقلوب تدرك معنى الوصل دون إكراه، وتكتفي بأن تكون خيراً لا يزول.", "للسكون لغة لا يفهمها إلا من ملّ صخب التفاصيل.. هنيئاً لمن وجد راحته في عزلته الجميلة.", "سلامٌ على العابرين الذين تركوا أثراً طيباً، وعلى الكلمات الناعمة التي دملت جرحاً دون أن تشعر.", "الأيام اللطيفة تبدأ من إشراقة فكر هادئ، واقتناع تام بأن ما كتبه الله هو أجمل ما قد يكون." ];
@@ -145,6 +149,28 @@
  textElement.innerText = `"${thoughts[currentIndex]}"`;
  textElement.classList.remove('fade-out');
  }, 300);
+ }
+
+ // التحكم الذكي في الموسيقى المخفية const music = document.getElementById('bgMusic');
+ const musicToggleBtn = document.getElementById('musicToggleBtn');
+ const musicStatus = document.getElementById('musicStatus');
+ let isPlaying = false;
+
+ function toggleAudio() {
+ if (isPlaying) {
+ music.pause();
+ musicToggleBtn.innerHTML = " تشغيل الخلفية الموسيقية";
+ musicStatus.innerText = "الموسيقى متوقفة مؤقتاً";
+ isPlaying = false;
+ } else {
+ music.play().then(() => {
+ musicToggleBtn.innerHTML = " إيقاف الموسيقى";
+ musicStatus.innerText = "الموسيقى تعزف في الخلفية بهدوء ";
+ isPlaying = true;
+ }).catch(error => {
+ musicStatus.innerText = "تعذر تشغيل الصوت، حاول مرة أخرى";
+ });
+ }
  }
  </script>
 </body>
