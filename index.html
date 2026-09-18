@@ -33,7 +33,6 @@
  align-items: center;
  justify-content: center;
  padding: 20px;
- overflow: hidden;
  background-image: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 100%);
  }
 
@@ -48,7 +47,6 @@
  padding: 40px 30px;
  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
  text-align: center;
- animation: fadeIn 1.5s ease-in-out;
  }
 
  .thought-box {
@@ -64,17 +62,16 @@
  font-size: 1.6rem;
  line-height: 2.2;
  color: var(--text-main);
- transition: opacity 0.5s ease, transform 0.5s ease;
+ transition: opacity 0.5s ease;
  }
 
  p.fade-out {
  opacity: 0;
- transform: translateY(-10px);
  }
 
  .controls {
  display: flex;
- justify-content: center;
+ flex-direction: column;
  align-items: center;
  gap: 15px;
  margin-top: 20px;
@@ -86,9 +83,9 @@
  background: rgba(56, 189, 248, 0.1);
  border: 1px solid var(--accent);
  color: var(--accent);
- padding: 10px 20px;
+ padding: 10px 25px;
  border-radius: 30px;
- font-size: 0.95rem;
+ font-size: 1rem;
  cursor: pointer;
  transition: all 0.3s ease;
  font-family: 'Tajawal', sans-serif;
@@ -97,25 +94,21 @@
  button:hover {
  background: var(--accent);
  color: var(--bg-color);
- box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
  }
 
- .music-status {
- font-size: 0.85rem;
- color: var(--text-muted);
- margin-top: 10px;
- }
-
- @keyframes fadeIn {
- from { opacity: 0; transform: translateY(20px); }
- to { opacity: 1; transform: translateY(0); }
+ audio {
+ width: 100%;
+ max-width: 300px;
+ height: 40px;
+ border-radius: 20px;
+ outline: none;
+ filter: invert(90%) hue-rotate(180deg);
  }
 
  footer {
  margin-top: 30px;
  font-size: 0.75rem;
  color: var(--text-muted);
- letter-spacing: 1px;
  }
  </style>
 </head>
@@ -128,8 +121,14 @@
 
  <div class="controls">
  <button onclick="nextThought()"> الخاطرة التالية</button>
- <button id="musicBtn" onclick="toggleAmbientSound()"> تشغيل الموسيقى</button>
- </div> <div id="musicStatus" class="music-status">الموسيقى متوقفة (اضغط للتشغيل)</div> </div>
+ 
+ <!-- استخدام الرابط المباشر لملف الصوت المرفوع على مستودع جيثب -->
+ <audio controls loop>
+ <source src="https://raw.githubusercontent.com/z3omohd/talk/main/music.mp3" type="audio/mp3">
+ متصفحك لا يدعم المشغل الصوتي.
+ </audio>
+ </div>
+ </div>
 
  <footer>WASAN THOUGHTS &copy; 2026</footer>
 
@@ -145,65 +144,7 @@
  currentIndex = (currentIndex + 1) % thoughts.length;
  textElement.innerText = `"${thoughts[currentIndex]}"`;
  textElement.classList.remove('fade-out');
- }, 500);
- }
-
- // مولد الصوت الهادئ (Web Audio API) - لا يحتاج لملفات خارجية أبداً let audioCtx = null;
- let isPlaying = false;
- let intervalId = null;
-
- const musicBtn = document.getElementById('musicBtn');
- const musicStatus = document.getElementById('musicStatus');
-
- // نغمات بيانو هادئة ومتناسقة (ترددات موجية) const frequencies = [261.63, 329.63, 392.00, 523.25, 587.33]; // C E G C D
-
- function playAmbientTone() {
- if (!audioCtx) return;
- const osc = audioCtx.createOscillator();
- const gain = audioCtx.createGain();
-
- // اختيار تردد عشوائي هادئ
- const freq = frequencies[Math.floor(Math.random() * frequencies.length)];
- osc.type = 'sine'; // موجة ناعمة تشبه البيانو أو الناي
- osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
- // تدرج هادئ جداً لظهور واختفاء الصوت (Fade in / Fade out)
- gain.gain.setValueAtTime(0, audioCtx.currentTime);
- gain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 1.5);
- gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 5.0);
-
- osc.connect(gain);
- gain.connect(audioCtx.destination);
-
- osc.start();
- osc.stop(audioCtx.currentTime + 5.0);
- }
-
- function toggleAmbientSound() {
- if (isPlaying) {
- if (audioCtx) {
- audioCtx.suspend();
- }
- clearInterval(intervalId);
- musicBtn.innerHTML = " تشغيل الموسيقى";
- musicStatus.innerText = "الموسيقى متوقفة";
- isPlaying = false;
- } else {
- if (!audioCtx) {
- audioCtx = new (window.AudioContext || window.webkitAudioContext)();
- }
- if (audioCtx.state === 'suspended') {
- audioCtx.resume();
- }
- 
- // تشغيل نغمة فورية ثم تكرارها كل 3 ثوانٍ
- playAmbientTone();
- intervalId = setInterval(playAmbientTone, 3000);
-
- musicBtn.innerHTML = " إيقاف الموسيقى";
- musicStatus.innerText = "الموسيقى تعمل في الخلفية ";
- isPlaying = true;
- }
+ }, 300);
  }
  </script>
 </body>
