@@ -34,6 +34,7 @@
  justify-content: center;
  padding: 20px;
  background-image: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 100%);
+ user-select: none;
  }
 
  .container {
@@ -46,7 +47,11 @@
  border-radius: 20px;
  padding: 40px 30px;
  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
- text-align: center;
+ text-align: center; cursor: pointer; /* للإشارة إلى أن البطاقة تفاعلية */ transition: transform 0.2s ease;
+ }
+
+ .container:active {
+ transform: scale(0.99);
  }
 
  .thought-box {
@@ -77,22 +82,18 @@
  margin-top: 20px;
  border-top: 1px solid var(--border-color);
  padding-top: 20px;
- flex-wrap: wrap;
  }
 
  button {
  background: rgba(56, 189, 248, 0.1);
  border: 1px solid var(--accent);
  color: var(--accent);
- padding: 10px 22px;
+ padding: 10px 25px;
  border-radius: 30px;
  font-size: 0.95rem;
  cursor: pointer;
  transition: all 0.3s ease;
  font-family: 'Tajawal', sans-serif;
- display: flex;
- align-items: center;
- gap: 8px;
  }
 
  button:hover {
@@ -101,14 +102,16 @@
  box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
  }
 
- /* إخفاء شريط الصوت التقليدي بالكامل ليصبح التصميم نظيفاً */ audio {
+ /* إخفاء مشغل الصوت كلياً */
+ .hidden-audio {
  display: none;
  }
 
  .music-status {
- font-size: 0.8rem;
+ font-size: 0.75rem;
  color: var(--text-muted);
- margin-top: 12px;
+ margin-top: 15px;
+ letter-spacing: 0.5px;
  }
 
  footer {
@@ -120,19 +123,20 @@
 </head>
 <body>
 
- <div class="container">
+ <div class="container" onclick="handleCardClick(event)">
  <div class="thought-box">
  <p id="thoughtText" class="thought-text">"تأتي السعادة أحياناً على شكل هدوء، كوب قهوة دافئ، وخاطرة تعيد ترتيب ما أبعثره زحام الأيام."</p>
  </div>
 
  <div class="controls">
- <button onclick="nextThought()"> الخاطرة التالية</button>
- <button id="musicToggleBtn" onclick="toggleAudio()"> تشغيل الخلفية الموسيقية</button>
- </div> <div id="musicStatus" class="music-status">اضغط لتفعيل الأجواء الموسيقية </div> </div>
+ <!-- زر الخاطرة فقط هو الظاهر -->
+ <button onclick="event.stopPropagation(); nextThought();"> الخاطرة التالية</button>
+ </div> <div id="musicStatus" class="music-status">انقر في أي مكان على البطاقة لتشغيل الموسيقى </div> </div>
 
  <footer>WASAN THOUGHTS &copy; 2026</footer>
 
- <!-- ملف الصوت مخفي ويعمل في الخلفية --> <audio id="bgMusic" loop>
+ <!-- ملف الصوت المخفي -->
+ <audio id="bgMusic" class="hidden-audio" preload="auto" loop>
  <source src="./music.mp3" type="audio/mp3">
  </audio>
 
@@ -151,24 +155,21 @@
  }, 300);
  }
 
- // التحكم الذكي في الموسيقى المخفية const music = document.getElementById('bgMusic');
- const musicToggleBtn = document.getElementById('musicToggleBtn');
+ const music = document.getElementById('bgMusic');
  const musicStatus = document.getElementById('musicStatus');
  let isPlaying = false;
 
- function toggleAudio() {
+ // النقر على البطاقة (خارج زر الخاطرة التالية) يشغل أو يوقف الموسيقى بسلاسة function handleCardClick(event) {
  if (isPlaying) {
  music.pause();
- musicToggleBtn.innerHTML = " تشغيل الخلفية الموسيقية";
- musicStatus.innerText = "الموسيقى متوقفة مؤقتاً";
+ musicStatus.innerText = "انقر على البطاقة لاستئناف الموسيقى ";
  isPlaying = false;
  } else {
  music.play().then(() => {
- musicToggleBtn.innerHTML = " إيقاف الموسيقى";
- musicStatus.innerText = "الموسيقى تعزف في الخلفية بهدوء ";
+ musicStatus.innerText = "الموسيقى تعمل في الخلفية ";
  isPlaying = true;
  }).catch(error => {
- musicStatus.innerText = "تعذر تشغيل الصوت، حاول مرة أخرى";
+ musicStatus.innerText = "تعذر تشغيل الصوت";
  });
  }
  }
