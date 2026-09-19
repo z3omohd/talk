@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>𝑨𝒃𝒖-𝑾𝒂𝒔𝒂𝒏-𝒯𝐻𝒪𝒰𝒢𝐻𝒯𝒮 ©</title>
+ <title> هادئة</title>
  
  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -50,6 +50,7 @@
  flex-direction: column;
  align-items: center;
  gap: 5px;
+ cursor: pointer;
  }
 
  audio {
@@ -103,17 +104,15 @@
  }
  </style>
 </head>
-<body>
+<body onclick="playMusicOnInteraction()">
 
- <!-- مشغل الموسيقى الثابت بالأعلى مع تلميح تفاعلي --> <div class="music-bar-container">
+ <!-- مشغل الموسيقى الثابت بالأعلى --> <div class="music-bar-container">
  <audio id="bgMusic" controls loop>
  <source src="./music.mp3" type="audio/mp3">
  متصفحك لا يدعم المشغل الصوتي.
- </audio>
- <span id="musicHint" class="music-hint">اسحب للأسفل ليبدأ العزف تلقائياً </span>
- </div>
+ </audio> <span id="musicHint" class="music-hint">انقر في أي مكان بالصفحة لبدء الموسيقى </span> </div>
 
- <!-- السرد الطولي للبطاقات --> <div class="feed-container" id="feedContainer">
+ <!-- السرد الطولي للبطاقات --> <div class="feed-container">
  <div class="thought-card">
  <p class="thought-text">"تجاهل آلاف الأيادي صافحتك عند الوصول وابحث عن يد نهضت بك عند تعثرك."</p>
  </div>
@@ -241,7 +240,7 @@
  <div class="thought-card">
  <p class="thought-text">"الحياة تبدأ من اليأس."</p>
  </div>
- <div class="thought-card"> مراقبة التمرير
+ <div class="thought-card">
  <p class="thought-text">"لابد أن تبالغ بوضوحك في عالم أعمى.."</p>
  </div>
  <div class="thought-card">
@@ -262,30 +261,23 @@
  <div class="thought-card"> <p class="thought-text">"الكوخ الذي تضحك فيه المرأة خير من القصر الذي تبكي فيه."</p> </div>
  </div>
 
- <footer>𝑨𝒃𝒖-𝑾𝒂𝒔𝒂𝒏-𝒯𝐻𝒪𝒰𝒢𝐻𝒯𝒮 ©2026</footer>
+ <footer>WASAN THOUGHTS &copy; 2026</footer>
 
  <script>
  const audio = document.getElementById('bgMusic');
  const musicHint = document.getElementById('musicHint');
- let hasPlayed = false;
+ let isStarted = false;
 
- // دالة لتشغيل الصوت عند أول عملية تمرير (Scroll) أو تفاعل بالصفحة function triggerAudioOnScroll() {
- if (!hasPlayed) {
+ function playMusicOnInteraction() {
+ if (!isStarted) {
  audio.play().then(() => {
  musicHint.innerText = "الموسيقى تعزف في الخلفية ";
- hasPlayed = true;
- // إزالة المستشعرات بعد التشغيل الناجح
- window.removeEventListener('scroll', triggerAudioOnScroll);
- window.removeEventListener('click', triggerAudioOnScroll);
- }).catch(error => {
- // المتصفح قد يمنع التشغيل التلقائي الصامت قبل أي تفاعل حقيقي
- musicHint.innerText = "انقر في أي مكان للتفعيل ";
+ isStarted = true;
+ }).catch(err => {
+ console.log("Waiting for user gesture");
  });
  }
  }
-
- // ربط الحدث بحركة السحب (Scroll) أو النقر بالصفحة window.addEventListener('scroll', triggerAudioOnScroll, { once: true });
- window.addEventListener('click', triggerAudioOnScroll, { once: true });
  </script>
 </body>
 </html>
