@@ -35,7 +35,7 @@
  background-image: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 100%);
  }
 
- /* شريط الموسيقى العائم في الأعلى */ .music-bar-container {
+ /* شريط الموسيقى العائم والثابت بالأعلى */ .music-bar-container {
  position: fixed;
  top: 20px;
  z-index: 1000;
@@ -46,6 +46,10 @@
  padding: 10px 20px;
  border-radius: 30px;
  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ gap: 5px;
  }
 
  audio {
@@ -56,6 +60,12 @@
  filter: invert(90%) hue-rotate(180deg);
  }
 
+ .music-hint {
+ font-size: 0.7rem;
+ color: var(--accent);
+ letter-spacing: 0.5px;
+ }
+
  /* حاوية السرد الطولي */
  .feed-container {
  width: 100%;
@@ -63,7 +73,7 @@
  display: flex;
  flex-direction: column;
  gap: 20px;
- margin-top: 90px;
+ margin-top: 100px;
  margin-bottom: 40px;
  }
 
@@ -95,14 +105,15 @@
 </head>
 <body>
 
- <!-- مشغل الموسيقى الثابت بالأعلى --> <div class="music-bar-container">
- <audio controls loop>
+ <!-- مشغل الموسيقى الثابت بالأعلى مع تلميح تفاعلي --> <div class="music-bar-container">
+ <audio id="bgMusic" controls loop>
  <source src="./music.mp3" type="audio/mp3">
  متصفحك لا يدعم المشغل الصوتي.
  </audio>
+ <span id="musicHint" class="music-hint">اسحب للأسفل ليبدأ العزف تلقائياً </span>
  </div>
 
- <!-- السرد الطولي للبطاقات مكتوب مباشرة لضمان ظهورها فوراً --> <div class="feed-container">
+ <!-- السرد الطولي للبطاقات --> <div class="feed-container" id="feedContainer">
  <div class="thought-card">
  <p class="thought-text">"تجاهل آلاف الأيادي صافحتك عند الوصول وابحث عن يد نهضت بك عند تعثرك."</p>
  </div>
@@ -110,6 +121,7 @@
  <p class="thought-text">"يحميك الله بنواياك الصادقة."</p>
  </div>
  <div class="thought-card">
+ <p class="thought-text">"تعلم الاكتفاء؛ فما تملك قليل الماء ينقذك وكثيرة يغرقك."</p>
  </div>
  <div class="thought-card">
  <p class="thought-text">"مهما بلغت ثقتك بالآخرين، لا تفتح لهم إلا غرفة الضيوف."</p>
@@ -121,17 +133,20 @@
  <p class="thought-text">"الشخص الذي تراه صعباً غالباً لا يرتاح معك."</p>
  </div>
  <div class="thought-card">
+ <p class="thought-text">"الوقاحة أن تنسى الفعل وتحاسب على ردة الفعل."</p>
  </div>
  <div class="thought-card">
  <p class="thought-text">"كل الخسائر قابلة للتعويض إلا خسارة أيامك بالبحث عن رضا الناس."</p>
  </div>
  <div class="thought-card">
+ <p class="thought-text">"لقد سرقوا مني كل شيء تقريبا، وأعطيتهم الباقي من تلقاء نفسي.. (رواية للمهرج)."</p>
  </div>
  <div class="thought-card">
  <p class="thought-text">"الحياة لا تبدأ بالولادة بل بالوعي، ولا تنتهي بالموت بل بانطفاء الروح."</p>
  </div>
  <div class="thought-card"> <p class="thought-text">"يتغير الناس لسببين: حينما يتعلم أكثر مما يريد، أو يتأذى أكثر مما يستحق."</p> </div>
  <div class="thought-card">
+ <p class="thought-text">"أغمضتها كي لا تفيض فأمطرت."</p>
  </div>
  <div class="thought-card">
  <p class="thought-text">"تجاهل النواقص في من تحب."</p>
@@ -141,6 +156,7 @@
  <p class="thought-text">"لا يتألم إلا الأوفياء."</p>
  </div>
  <div class="thought-card">
+ <p class="thought-text">"يموت الفقير وفي عزاءه تذبح كل الخراف.."</p>
  </div>
  <div class="thought-card">
  <p class="thought-text">"من الصعب التعايش من أناس يرون أنفسهم دائماً على حق."</p>
@@ -211,11 +227,13 @@
  <p class="thought-text">"لا أجيد الشخصية الجادة التي لا تعرف السماح ولا المزاح."</p>
  </div>
  <div class="thought-card">
+ <p class="thought-text">"هزمني انتصاري عليك."</p>
  </div>
  <div class="thought-card">
  <p class="thought-text">"الحكيم يغفر إساءة الجاهل."</p>
  </div>
  <div class="thought-card">
+ <p class="thought-text">"من تركنا في وسط الغابة لا يححق له ان يسأل عما فعلت الذئاب بنا."</p>
  </div>
  <div class="thought-card">
  <p class="thought-text">"ان لم تمشي اليوم ستضطر للركض غداً."</p>
@@ -223,7 +241,7 @@
  <div class="thought-card">
  <p class="thought-text">"الحياة تبدأ من اليأس."</p>
  </div>
- <div class="thought-card">
+ <div class="thought-card"> مراقبة التمرير
  <p class="thought-text">"لابد أن تبالغ بوضوحك في عالم أعمى.."</p>
  </div>
  <div class="thought-card">
@@ -244,7 +262,30 @@
  <div class="thought-card"> <p class="thought-text">"الكوخ الذي تضحك فيه المرأة خير من القصر الذي تبكي فيه."</p> </div>
  </div>
 
- <footer>WASAN THOUGHTS &copy; 2026</footer>
+ <footer>𝑨𝒃𝒖-𝑾𝒂𝒔𝒂𝒏-𝒯𝐻𝒪𝒰𝒢𝐻𝒯𝒮 ©2026</footer>
 
+ <script>
+ const audio = document.getElementById('bgMusic');
+ const musicHint = document.getElementById('musicHint');
+ let hasPlayed = false;
+
+ // دالة لتشغيل الصوت عند أول عملية تمرير (Scroll) أو تفاعل بالصفحة function triggerAudioOnScroll() {
+ if (!hasPlayed) {
+ audio.play().then(() => {
+ musicHint.innerText = "الموسيقى تعزف في الخلفية ";
+ hasPlayed = true;
+ // إزالة المستشعرات بعد التشغيل الناجح
+ window.removeEventListener('scroll', triggerAudioOnScroll);
+ window.removeEventListener('click', triggerAudioOnScroll);
+ }).catch(error => {
+ // المتصفح قد يمنع التشغيل التلقائي الصامت قبل أي تفاعل حقيقي
+ musicHint.innerText = "انقر في أي مكان للتفعيل ";
+ });
+ }
+ }
+
+ // ربط الحدث بحركة السحب (Scroll) أو النقر بالصفحة window.addEventListener('scroll', triggerAudioOnScroll, { once: true });
+ window.addEventListener('click', triggerAudioOnScroll, { once: true });
+ </script>
 </body>
 </html>
